@@ -12,7 +12,7 @@ COIN_FLIP_MCP_SERVER = [
 ]
 
 root_agent = LlmAgent(
-    model="gemini-2.0-flash",
+    model="gemini-2.0-flash",  # TODO: Change this to LiteLLM
     name="filesystem_assistant_agent",
     instruction="Help the user manage their files. You can list files, read files, etc.",
     tools=[COIN_FLIP_MCP_SERVER],
