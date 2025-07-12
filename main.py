@@ -1,6 +1,3 @@
-def main():
-    print("Hello from magic-eval!")
+# TODO: Run test scenario creation tool
 
-
-if __name__ == "__main__":
-    main()
+# TODO: Run scenarios and evaluate results
