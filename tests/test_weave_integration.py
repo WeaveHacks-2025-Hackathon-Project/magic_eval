@@ -9,6 +9,7 @@ from google.adk.sessions import InMemorySessionService
 from weave_config import setup_weave_tracing
 
 
+@pytest.mark.asyncio
 async def test_weave_integration():
     """Test the Weave integration with ADK agent."""
 
