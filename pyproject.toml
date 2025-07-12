@@ -9,6 +9,14 @@ dependencies = [
     "python-dotenv>=1.1.1",
     "litellm>=1.30.7",
     "pydantic>=2.11.7",
+<<<<<<< HEAD
     "crewai>=0.141.0",
     "crewai-tools>=0.51.1",
+=======
+    "weave>=0.50.0",
+    "wandb>=0.16.0",
+    "opentelemetry-api>=1.21.0",
+    "opentelemetry-sdk>=1.21.0",
+    "opentelemetry-exporter-otlp>=1.21.0",
+>>>>>>> 03804af (Add Weave integration with OpenTelemetry tracing in the example agent. Update dependencies in pyproject.toml and create test script for Weave integration.)
 ]
