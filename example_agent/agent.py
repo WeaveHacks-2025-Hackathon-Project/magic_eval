@@ -20,10 +20,20 @@ COIN_FLIP_MCP_SERVER = [
 # Configure LiteLLM with Llama
 os.environ["LLAMA_API_KEY"] = os.getenv("LLAMA_API_KEY")
 
+
+# Create a custom completion function that uses your specific model
+def llama_completion(messages, **kwargs):
+    return completion(
+        model="meta-llama/Llama-4-Scout-17B-16E-Instruct-FP8",  # Your specific model
+        messages=messages,
+        **kwargs,
+    )
+
+
 root_agent = LlmAgent(
-    model="llama",  # Using Llama through LiteLLM
+    model="meta-llama/Llama-4-Scout-17B-16E-Instruct-FP8",  # Correct model identifier
     name="filesystem_assistant_agent",
     instruction="Help the user manage their files. You can list files, read files, etc.",
     tools=[COIN_FLIP_MCP_SERVER],
-    llm_completion_function=completion,  # Use LiteLLM's completion function
+    llm_completion_function=llama_completion,  # Use custom completion function
 )
