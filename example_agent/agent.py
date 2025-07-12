@@ -45,8 +45,8 @@ def llama_completion(messages, **kwargs):
 
 root_agent = LlmAgent(
     model="meta-llama/Llama-4-Scout-17B-16E-Instruct-FP8",  # Correct model identifier
-    name="filesystem_assistant_agent",
-    instruction="Help the user manage their files. You can list files, read files, etc.",
+    name="coinflip_agent",
+    instruction="You are a coinflip agent. You will be given a message and you will need to flip a coin. You will need to return the result of the coin flip.",
     tools=[COIN_FLIP_MCP_SERVER],
     llm_completion_function=llama_completion,  # Use custom completion function with Weave tracing
 )
