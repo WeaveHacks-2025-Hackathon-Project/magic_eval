@@ -2,10 +2,9 @@
 
 import asyncio
 import os
+import pytest
 from example_agent.agent import root_agent
-from google.genai import types
-from google.adk.runners import Runner
-from google.adk.sessions import InMemorySessionService
+from src.runner.scenario_runner import call_agent_async
 from weave_config import setup_weave_tracing
 
 
@@ -41,41 +40,21 @@ async def test_weave_integration():
         print(f"❌ Failed to initialize Weave tracing: {e}")
         return False
 
-    # Set up session and runner
-    try:
-        session_service = InMemorySessionService()
-        session = await session_service.create_session(
-            app_name="test_app", user_id="test_user", session_id="test_session"
-        )
-
-        runner = Runner(
-            agent=root_agent, app_name="test_app", session_service=session_service
-        )
-        print("✅ Session and runner setup complete")
-    except Exception as e:
-        print(f"❌ Failed to setup session/runner: {e}")
-        return False
-
-    # Create a test message
-    content = types.Content(
-        role="user",
-        parts=[types.Part(text="Flip a coin")],
-    )
-
     print("Running agent with message: 'Flip a coin'")
     print("This should trigger the coin flip MCP tool...")
 
-    # Run the agent with tracing
+    # Run the agent with tracing using scenario_runner helper
     try:
-        events = runner.run_async(
-            user_id="test_user", session_id="test_session", new_message=content
+        all_events = await call_agent_async(
+            agent=root_agent,
+            query="Flip a coin",
+            user_id="test_user",
+            session_id="test_session",
+            app_name="test_app",
         )
 
-        # Collect all events and log them
-        all_events = []
-        async for event in events:
-            all_events.append(event)
-            # Log different event types for debugging
+        # Log events for debugging
+        for event in all_events:
             if hasattr(event, "content") and event.content:
                 print(
                     f"Event: {type(event).__name__} - Content: {event.content.parts[0].text if event.content.parts else 'No text'}"
