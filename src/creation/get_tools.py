@@ -1,7 +1,52 @@
+from typing import List, Optional
+from pydantic import BaseModel, Field
 from google.adk.agents import Agent
 
 
-def get_tools_from_agent(adk_agent: Agent) -> SOMETHING:
-    # TODO: For Harish, we need to prompt the adk agent and tell it to return a list of tools and their descriptions
-    # Use the call_agent_async function to run the ADK agent
-    raise NotImplementedError("Not implemented")
+class ToolInfo(BaseModel):
+    """Information about a tool available to an agent."""
+
+    name: str = Field(..., description="The name of the tool")
+    description: str = Field(..., description="A description of what the tool does")
+    parameters: Optional[dict] = Field(
+        None, description="Tool parameters schema if available"
+    )
+
+
+class AgentTools(BaseModel):
+    """Collection of tools available to an agent."""
+
+    tools: List[ToolInfo] = Field(
+        ..., description="List of tools and their descriptions"
+    )
+    agent_name: str = Field(..., description="Name of the agent these tools belong to")
+
+
+def get_tools_from_agent(adk_agent: Agent) -> AgentTools:
+    """
+    Extract tools and their descriptions from an ADK agent.
+
+    Args:
+        adk_agent: The ADK agent to extract tools from
+
+    Returns:
+        AgentTools: A Pydantic model containing the list of tools and their descriptions
+    """
+    tools_info = []
+
+    # Extract tools from the agent
+    if hasattr(adk_agent, "tools") and adk_agent.tools:
+        for tool in adk_agent.tools:
+            tool_info = ToolInfo(
+                name=tool.name if hasattr(tool, "name") else str(tool),
+                description=tool.description
+                if hasattr(tool, "description")
+                else "No description available",
+                parameters=getattr(tool, "parameters", None),
+            )
+            tools_info.append(tool_info)
+
+    # Get agent name
+    agent_name = getattr(adk_agent, "name", "Unknown Agent")
+
+    return AgentTools(tools=tools_info, agent_name=agent_name)
