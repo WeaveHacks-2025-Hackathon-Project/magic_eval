@@ -7,11 +7,18 @@ from crewai.project import CrewBase, agent, crew, task
 # Check our tools documentation for more information on how to use them
 from pydantic import BaseModel, Field
 
+LLAMA_MODEL = "Llama-4-Scout-17B-16E-Instruct-FP8"
+
 
 class Scenario(BaseModel):
     name: str = Field(..., description="Name of the scenario")
     description: str = Field(..., description="Description of the scenario")
     why_its_suitable: str = Field(..., description="Why it's a suitable scenario")
+    # TODO: Add another field for the expected tool calls that should be made
+
+
+class ScenarioList(BaseModel):
+    scenarios: list[Scenario] = Field(..., description="List of scenarios")
 
 
 @CrewBase
@@ -27,7 +34,7 @@ class Scenario_Eval_Crew:
             config=self.agents_config["scenario_evaluator"],
             verbose=True,
             allow_delegation=False,
-            llm="meta_llama/Llama-4-Scout-17B-16E-Instruct-FP8",
+            llm=f"meta_llama/{LLAMA_MODEL}",
         )
 
     @task
@@ -35,6 +42,8 @@ class Scenario_Eval_Crew:
         return Task(
             config=self.tasks_config["scenario_evaluator_task"],
             agent=self.scenario_evaluator(),
+            # NOTE: For Manish, we can change the expected output type if needed
+            output_pydantic=ScenarioList,
         )
 
     @crew
