@@ -5,6 +5,8 @@ from google.adk.runners import Runner
 from google.adk.sessions import InMemorySessionService
 from google.genai import types
 
+from runner.scenario import Scenario
+
 
 async def setup_session_and_runner(
     agent: Agent, app_name: str, user_id: str, session_id: str
@@ -30,3 +32,9 @@ async def call_agent_async(
 
     all_events = [event async for event in events]
     return all_events
+
+
+# TODO: Create a function to run a scenario
+async def run_scenario(scenario: Scenario, agent: Agent) -> bool:
+    """Run a scenario and return True if successful, False otherwise."""
+    raise NotImplementedError("Not implemented")
