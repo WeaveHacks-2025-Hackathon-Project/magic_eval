@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 from google.adk.agents import LlmAgent
 from google.adk.models.lite_llm import LiteLlm
 from google.adk.tools.mcp_tool.mcp_toolset import MCPToolset, StdioServerParameters
-from weave_config import setup_weave_tracing, create_weave_op
+from src.weave_config import setup_weave_tracing, create_weave_op
 
 # Load environment variables
 load_dotenv()
@@ -19,6 +19,8 @@ COIN_FLIP_MCP_SERVER = MCPToolset(
     )
 )
 
+LLAMA_MODEL = "Llama-4-Scout-17B-16E-Instruct-FP8"
+
 # Configure environment variables for the model
 os.environ["LLAMA_API_KEY"] = os.getenv("LLAMA_API_KEY")
 os.environ["WANDB_API_KEY"] = os.getenv("WANDB_API_KEY")
@@ -28,11 +30,11 @@ os.environ["WANDB_API_KEY"] = os.getenv("WANDB_API_KEY")
 @create_weave_op
 def llama_completion(messages, **kwargs):
     with tracer.start_as_current_span("llama_completion") as span:
-        span.set_attribute("model", "Llama-4-Scout-17B-16E-Instruct-FP8")
+        span.set_attribute("model", LLAMA_MODEL)
         span.set_attribute("messages_count", len(messages))
 
         # Create LiteLLM model instance
-        model = LiteLlm(model="meta-llama/Llama-4-Scout-17B-16E-Instruct-FP8")
+        model = LiteLlm(model=f"meta-llama/{LLAMA_MODEL}")
 
         # Use the model's completion method
         result = model.complete(messages=messages, **kwargs)
@@ -41,12 +43,8 @@ def llama_completion(messages, **kwargs):
         return result
 
 
-# Create agent using ADK LiteLLM wrapper
 root_agent = LlmAgent(
-    model=LiteLlm(
-        model="meta-llama/Llama-4-Scout-17B-16E-Instruct-FP8"
-    ),  # Use ADK LiteLLM wrapper
+    model=LiteLlm(model=f"meta_llama/{LLAMA_MODEL}"),
     name="coinflip_agent",
     instruction="You are a coinflip agent. You will be given a message and you will need to flip a coin. You will need to return the result of the coin flip.",
-    tools=[COIN_FLIP_MCP_SERVER],  # Pass the toolset directly in a list
 )
