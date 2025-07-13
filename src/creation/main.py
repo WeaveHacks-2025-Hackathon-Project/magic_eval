@@ -1,5 +1,5 @@
 from scenario_creator import Scenario_Eval_Crew
-from src.models import Scenario, ScenarioList, Tool
+from src.models import Scenario, ScenarioList, ToolInfo
 import json
 
 
@@ -7,21 +7,29 @@ def run():
     """Run the scenario evaluation crew with default inputs."""
     # Define the tools that the AI agent can use
     tools = [
-        Tool(
-            tool_name="get_weather",
-            tool_description="Get weather information for a specific location and date. Accepts location (string) and date (string in YYYY-MM-DD format).",
+        ToolInfo(
+            name="get_weather",
+            description="Get weather information for a specific location and date. Accepts location (string) and date (string in YYYY-MM-DD format).",
+            parameters={"location": "string", "date": "string (YYYY-MM-DD)"},
         ),
-        Tool(
-            tool_name="send_email",
-            tool_description="Send an email to a recipient. Accepts recipient_email (string), subject (string), and body (string).",
+        ToolInfo(
+            name="send_email",
+            description="Send an email to a recipient. Accepts recipient_email (string), subject (string), and body (string).",
+            parameters={
+                "recipient_email": "string",
+                "subject": "string",
+                "body": "string",
+            },
         ),
-        Tool(
-            tool_name="search_web",
-            tool_description="Search the web for information. Accepts query (string) and returns relevant search results.",
+        ToolInfo(
+            name="search_web",
+            description="Search the web for information. Accepts query (string) and returns relevant search results.",
+            parameters={"query": "string"},
         ),
-        Tool(
-            tool_name="calculate",
-            tool_description="Perform mathematical calculations. Accepts expression (string) and returns the result.",
+        ToolInfo(
+            name="calculate",
+            description="Perform mathematical calculations. Accepts expression (string) and returns the result.",
+            parameters={"expression": "string"},
         ),
     ]
 
@@ -35,7 +43,7 @@ def run():
     print(scenarios)
 
 
-def create_scenarios(tools) -> list[Scenario]:
+def create_scenarios(tools: list[ToolInfo]) -> list[Scenario]:
     """Create scenarios for the given tools."""
     inputs = {
         "tools": [tool.model_dump() for tool in tools],

@@ -24,6 +24,10 @@ class ToolInfo(BaseModel):
     )
 
 
+class ScenarioList(BaseModel):
+    scenarios: list[Scenario] = Field(..., description="List of scenarios")
+
+
 class AgentTools(BaseModel):
     """Collection of tools available to an agent."""
 
