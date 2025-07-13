@@ -37,4 +37,25 @@ async def call_agent_async(
 # TODO: Create a function to run a scenario
 async def run_scenario(scenario: Scenario, agent: Agent) -> bool:
     """Run a scenario and return True if successful, False otherwise."""
-    raise NotImplementedError("Not implemented")
+    expected_tool_call = scenario.expected_tool_call
+
+    # Filler names
+    user_id = ("1",)
+    session_id = ("2",)
+    app_name = ("3",)
+
+    events = await call_agent_async(
+        agent, scenario.query, user_id, session_id, app_name
+    )
+
+    all_function_calls = []
+    for event in events:
+        all_function_calls.extend(event.get_function_calls())
+
+    if expected_tool_call is None and len(all_function_calls) == 0:
+        return True
+
+    if expected_tool_call is not None and expected_tool_call in all_function_calls:
+        return True
+
+    return False
