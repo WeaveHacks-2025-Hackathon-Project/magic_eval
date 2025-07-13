@@ -1,3 +1,4 @@
+from typing import Optional
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
 
@@ -14,6 +15,10 @@ class Scenario(BaseModel):
     name: str = Field(..., description="Name of the scenario")
     description: str = Field(..., description="Description of the scenario")
     why_its_suitable: str = Field(..., description="Why it's a suitable scenario")
+    expected_tool_call: Optional[str] = Field(
+        ...,
+        description="Expected tool call that should be made. This can be set to None if no tool should be called",
+    )
     # TODO: Add another field for the expected tool calls that should be made
 
 
@@ -42,7 +47,6 @@ class Scenario_Eval_Crew:
         return Task(
             config=self.tasks_config["scenario_evaluator_task"],
             agent=self.scenario_evaluator(),
-            # NOTE: For Manish, we can change the expected output type if needed
             output_pydantic=ScenarioList,
         )
 
