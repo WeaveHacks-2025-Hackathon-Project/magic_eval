@@ -9,7 +9,7 @@ from crewai.project import CrewBase, agent, crew, task
 from src.models import Scenario, ScenarioList
 
 
-LLAMA_MODEL = "Llama-3.3-70B-Instruct"
+LLAMA_MODEL = "Llama-4-Maverick-17B-128E-Instruct-FP8"
 
 
 @CrewBase

@@ -1,4 +1,4 @@
-from scenario_creator import Scenario_Eval_Crew
+from src.creation.scenario_creator import Scenario_Eval_Crew
 from src.models import Scenario, ScenarioList, ToolInfo
 import json
 
