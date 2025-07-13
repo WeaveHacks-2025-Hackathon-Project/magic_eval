@@ -1,15 +1,17 @@
 """Pydantic models for scenario creation and testing."""
 
-from typing import List, Optional
+from typing import List, Optional, Union
 from pydantic import BaseModel, Field
 
 
 class Scenario(BaseModel):
-    """A scenario is a set of inputs and expected outputs for an agent."""
-
-    # TODO: Add Field, description using Pydantic
-    query: str
-    expected_tool_calls: list[str]
+    name: str = Field(..., description="Name of the scenario")
+    query: str = Field(..., description="User query for the scenario")
+    why_its_suitable: str = Field(..., description="Why it's a suitable scenario")
+    expected_tool_call: Union[str, None] = Field(
+        ...,
+        description="Expected tool call that should be made. This can be set to None if no tool should be called",
+    )
 
 
 class ToolInfo(BaseModel):

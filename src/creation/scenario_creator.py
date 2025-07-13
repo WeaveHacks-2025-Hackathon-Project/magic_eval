@@ -1,29 +1,15 @@
 from typing import Optional
-from crewai import Agent, Crew, Process, Task
+from crewai import Agent, Crew, Process, Task, LLM
 from crewai.project import CrewBase, agent, crew, task
 
 # Uncomment the following line to use an example of a custom tool
 # from surprise_travel.tools.custom_tool import MyCustomTool
 
 # Check our tools documentation for more information on how to use them
-from pydantic import BaseModel, Field
-
-LLAMA_MODEL = "Llama-4-Scout-17B-16E-Instruct-FP8"
+from src.models import Scenario, ScenarioList
 
 
-class Scenario(BaseModel):
-    name: str = Field(..., description="Name of the scenario")
-    description: str = Field(..., description="Description of the scenario")
-    why_its_suitable: str = Field(..., description="Why it's a suitable scenario")
-    expected_tool_call: Optional[str] = Field(
-        ...,
-        description="Expected tool call that should be made. This can be set to None if no tool should be called",
-    )
-    # TODO: Add another field for the expected tool calls that should be made
-
-
-class ScenarioList(BaseModel):
-    scenarios: list[Scenario] = Field(..., description="List of scenarios")
+LLAMA_MODEL = "Llama-3.3-70B-Instruct"
 
 
 @CrewBase
@@ -33,13 +19,17 @@ class Scenario_Eval_Crew:
     agents_config = "config/agents.yaml"
     tasks_config = "config/tasks.yaml"
 
+    llm = LLM(
+        model=f"meta_llama/{LLAMA_MODEL}",
+    )
+
     @agent
     def scenario_evaluator(self) -> Agent:
         return Agent(
             config=self.agents_config["scenario_evaluator"],
             verbose=True,
             allow_delegation=False,
-            llm=f"meta_llama/{LLAMA_MODEL}",
+            llm=self.llm,
         )
 
     @task
@@ -47,7 +37,8 @@ class Scenario_Eval_Crew:
         return Task(
             config=self.tasks_config["scenario_evaluator_task"],
             agent=self.scenario_evaluator(),
-            output_pydantic=ScenarioList,
+            expected_output="A list of scenarios that should be tested to verify that the AI agent works successfully. Each scenario should be a structured object with name, description, why_its_suitable, and expected_tool_call fields. The expected_tool_call field should contain only the tool name (not the full function call with parameters) or None.",
+            output_json=ScenarioList,
         )
 
     @crew

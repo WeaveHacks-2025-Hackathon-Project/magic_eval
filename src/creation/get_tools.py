@@ -19,9 +19,11 @@ def get_tools_from_agent(adk_agent: Agent) -> AgentTools:
         for tool in adk_agent.tools:
             tool_info = ToolInfo(
                 name=tool.name if hasattr(tool, "name") else str(tool),
-                description=tool.description
-                if hasattr(tool, "description")
-                else "No description available",
+                description=(
+                    tool.description
+                    if hasattr(tool, "description")
+                    else "No description available"
+                ),
                 parameters=getattr(tool, "parameters", None),
             )
             tools_info.append(tool_info)
