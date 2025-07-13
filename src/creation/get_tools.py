@@ -1,25 +1,5 @@
-from typing import List, Optional
-from pydantic import BaseModel, Field
 from google.adk.agents import Agent
-
-
-class ToolInfo(BaseModel):
-    """Information about a tool available to an agent."""
-
-    name: str = Field(..., description="The name of the tool")
-    description: str = Field(..., description="A description of what the tool does")
-    parameters: Optional[dict] = Field(
-        None, description="Tool parameters schema if available"
-    )
-
-
-class AgentTools(BaseModel):
-    """Collection of tools available to an agent."""
-
-    tools: List[ToolInfo] = Field(
-        ..., description="List of tools and their descriptions"
-    )
-    agent_name: str = Field(..., description="Name of the agent these tools belong to")
+from src.models import AgentTools, ToolInfo
 
 
 def get_tools_from_agent(adk_agent: Agent) -> AgentTools:
