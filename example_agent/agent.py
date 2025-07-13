@@ -13,13 +13,11 @@ load_dotenv()
 # Set up Weave tracing
 tracer = setup_weave_tracing()
 
-COIN_FLIP_MCP_SERVER = [
-    MCPToolset(
-        connection_params=StdioServerParameters(
-            command="npx", args=["-y", "@modelcontextprotocol/server-coin-flip"]
-        )
+COIN_FLIP_MCP_SERVER = MCPToolset(
+    connection_params=StdioServerParameters(
+        command="npx", args=["-y", "@modelcontextprotocol/server-coin-flip"]
     )
-]
+)
 
 # Configure environment variables for the model
 os.environ["LLAMA_API_KEY"] = os.getenv("LLAMA_API_KEY")
@@ -30,7 +28,7 @@ os.environ["WANDB_API_KEY"] = os.getenv("WANDB_API_KEY")
 @create_weave_op
 def llama_completion(messages, **kwargs):
     with tracer.start_as_current_span("llama_completion") as span:
-        span.set_attribute("model", "meta-llama/Llama-4-Scout-17B-16E-Instruct-FP8")
+        span.set_attribute("model", "Llama-4-Scout-17B-16E-Instruct-FP8")
         span.set_attribute("messages_count", len(messages))
 
         # Create LiteLLM model instance
@@ -50,6 +48,5 @@ root_agent = LlmAgent(
     ),  # Use ADK LiteLLM wrapper
     name="coinflip_agent",
     instruction="You are a coinflip agent. You will be given a message and you will need to flip a coin. You will need to return the result of the coin flip.",
-    tools=[COIN_FLIP_MCP_SERVER],
-    llm_completion_function=llama_completion,  # Use custom completion function with Weave tracing
+    tools=[COIN_FLIP_MCP_SERVER],  # Pass the toolset directly in a list
 )
