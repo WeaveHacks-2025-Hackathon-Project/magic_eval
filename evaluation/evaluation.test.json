@@ -1,5 +1,5 @@
 {
-  "eval_set_id": "home_automation_agent_light_on_off_set",
+  "eval_set_id": "automation_agent_store_file_set",
   "name": "",
   "description": "This is an eval set that is used for unit testing storage interaction behavior of the Agent",
   "eval_cases": [
