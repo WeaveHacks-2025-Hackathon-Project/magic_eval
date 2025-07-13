@@ -1,0 +1,53 @@
+{
+  "eval_set_id": "home_automation_agent_light_on_off_set",
+  "name": "",
+  "description": "This is an eval set that is used for unit testing storage interaction behavior of the Agent",
+  "eval_cases": [
+    {
+      "eval_id": "eval_case_id",
+      "conversation": [
+        {
+          "invocation_id": "b7982664-0ab6-47cc-ab13-326656afdf75",
+          "user_content": {
+            "parts": [
+              {
+                "text": "Store file alpha to storage location onedrive."
+              }
+            ],
+            "role": "user"
+          },
+          "final_response": {
+            "parts": [
+              {
+                "text": "I have stored file alpha to storage location onedrive."
+              }
+            ],
+            "role": "model"
+          },
+          "intermediate_data": {
+            "tool_uses": [
+              {
+                "args": {
+                  "location": "onedrive",
+                  "device_id": "device_0",
+                  "status": "used"
+                },
+                "name": "use_storage_location"
+              }
+            ],
+            "intermediate_responses": []
+          }
+        }
+      ],
+      "session_input": {
+        "app_name": "Storage_agent",
+        "user_id": "test_user",
+        "state": {}
+      }
+    }
+  ],
+"criteria":{
+"tool_trajectory_avg_score":1.0,
+"response_match_score":0.8
+}
+}
