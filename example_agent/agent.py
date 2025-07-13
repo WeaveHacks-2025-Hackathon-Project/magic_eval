@@ -19,7 +19,7 @@ MCP_TIME_SERVER = MCPToolset(
     )
 )
 
-LLAMA_MODEL = "Llama-4-Scout-17B-16E-Instruct-FP8"
+LLAMA_MODEL = "Llama-3.3-70B-Instruct"
 
 # Configure environment variables for the model
 os.environ["LLAMA_API_KEY"] = os.getenv("LLAMA_API_KEY")

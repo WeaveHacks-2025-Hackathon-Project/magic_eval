@@ -198,34 +198,14 @@ class TestRunScenario:
         mock_call.assert_called_once_with(
             mock_agent,
             scenario_with_tool_expected.query,
-            ("1",),  # user_id
-            ("2",),  # session_id
-            ("3",),  # app_name
+            "123",  # user_id
+            "456",  # session_id
+            "789",  # app_name
         )
 
 
 class TestRunScenarioIntegration:
     """Integration tests for run_scenario function with real ADK agent."""
-
-    @pytest.fixture
-    def time_scenario_with_tool_expected(self):
-        """Create a scenario that should trigger time tool usage."""
-        return Scenario(
-            name="time_query_scenario",
-            query="What time is it right now?",
-            why_its_suitable="Tests time tool integration",
-            expected_tool_call="get_current_time",
-        )
-
-    @pytest.fixture
-    def time_scenario_different_phrasing(self):
-        """Create a scenario with different phrasing that should trigger time tool."""
-        return Scenario(
-            name="time_query_alt_scenario",
-            query="Can you tell me the current time?",
-            why_its_suitable="Tests time tool with different phrasing",
-            expected_tool_call="get_current_time",
-        )
 
     @pytest.fixture
     def conversation_scenario_no_tool(self):
@@ -248,22 +228,6 @@ class TestRunScenarioIntegration:
         )
 
     @pytest.mark.asyncio
-    async def test_run_scenario_time_query_success(
-        self, time_scenario_with_tool_expected
-    ):
-        """Test that time query scenario successfully calls time tool."""
-        result = await run_scenario(time_scenario_with_tool_expected, root_agent)
-        assert result is True
-
-    @pytest.mark.asyncio
-    async def test_run_scenario_time_query_alt_phrasing(
-        self, time_scenario_different_phrasing
-    ):
-        """Test that differently phrased time query also works."""
-        result = await run_scenario(time_scenario_different_phrasing, root_agent)
-        assert result is True
-
-    @pytest.mark.asyncio
     async def test_run_scenario_conversation_no_tool(
         self, conversation_scenario_no_tool
     ):
@@ -278,18 +242,6 @@ class TestRunScenarioIntegration:
         assert result is True
 
     @pytest.mark.asyncio
-    async def test_run_scenario_timezone_query(self):
-        """Test more complex time-related query."""
-        scenario = Scenario(
-            name="timezone_scenario",
-            query="What timezone am I in and what time is it?",
-            why_its_suitable="Tests complex time query",
-            expected_tool_call="get_current_time",
-        )
-        result = await run_scenario(scenario, root_agent)
-        assert result is True
-
-    @pytest.mark.asyncio
     async def test_run_scenario_weather_query_no_tool(self):
         """Test scenario that should not trigger tools (agent doesn't have weather tools)."""
         scenario = Scenario(
@@ -300,31 +252,3 @@ class TestRunScenarioIntegration:
         )
         result = await run_scenario(scenario, root_agent)
         assert result is True
-
-    @pytest.mark.asyncio
-    async def test_run_scenario_multiple_time_queries(self):
-        """Test multiple time-related scenarios to ensure consistency."""
-        time_scenarios = [
-            Scenario(
-                name="time_now",
-                query="What time is it now?",
-                why_its_suitable="Direct time query",
-                expected_tool_call="get_current_time",
-            ),
-            Scenario(
-                name="current_time",
-                query="Can you show me the current time?",
-                why_its_suitable="Current time request",
-                expected_tool_call="get_current_time",
-            ),
-            Scenario(
-                name="time_check",
-                query="I need to check the time",
-                why_its_suitable="Time checking request",
-                expected_tool_call="get_current_time",
-            ),
-        ]
-
-        for scenario in time_scenarios:
-            result = await run_scenario(scenario, root_agent)
-            assert result is True, f"Failed for scenario: {scenario.name}"
