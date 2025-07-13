@@ -27,6 +27,7 @@ class Scenario_Eval_Crew:
             config=self.agents_config["scenario_evaluator"],
             verbose=True,
             allow_delegation=False,
+            llm="meta_llama/Llama-4-Scout-17B-16E-Instruct-FP8",
         )
 
     @task
