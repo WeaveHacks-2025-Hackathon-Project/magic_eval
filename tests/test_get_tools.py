@@ -1,5 +1,4 @@
 import pytest
-from unittest.mock import Mock, MagicMock
 from src.creation.get_tools import get_tools_from_agent
 from src.models import AgentTools, ToolInfo
 from example_agent.agent import root_agent
@@ -23,16 +22,16 @@ def test_get_tools_from_agent_with_real_agent():
         assert tool.description is not None
 
 
-def test_get_tools_from_agent_with_mock_agent():
+def test_get_tools_from_agent_with_mock_agent(mocker):
     """Test get_tools_from_agent with a mock agent that has tools."""
     # Create a mock tool
-    mock_tool = Mock()
+    mock_tool = mocker.Mock()
     mock_tool.name = "test_tool"
     mock_tool.description = "A test tool for testing purposes"
     mock_tool.parameters = {"param1": "string"}
 
     # Create a mock agent
-    mock_agent = Mock()
+    mock_agent = mocker.Mock()
     mock_agent.name = "test_agent"
     mock_agent.tools = [mock_tool]
 
@@ -49,9 +48,9 @@ def test_get_tools_from_agent_with_mock_agent():
     assert tool.parameters == {"param1": "string"}
 
 
-def test_get_tools_from_agent_with_no_tools():
+def test_get_tools_from_agent_with_no_tools(mocker):
     """Test get_tools_from_agent with an agent that has no tools."""
-    mock_agent = Mock()
+    mock_agent = mocker.Mock()
     mock_agent.name = "empty_agent"
     mock_agent.tools = []
 
@@ -62,13 +61,13 @@ def test_get_tools_from_agent_with_no_tools():
     assert len(result.tools) == 0
 
 
-def test_get_tools_from_agent_with_tool_no_attributes():
+def test_get_tools_from_agent_with_tool_no_attributes(mocker):
     """Test get_tools_from_agent with a tool that doesn't have name/description attributes."""
     # Create a tool without name/description attributes
-    mock_tool = Mock()
+    mock_tool = mocker.Mock()
     # Don't set name or description attributes
 
-    mock_agent = Mock()
+    mock_agent = mocker.Mock()
     mock_agent.name = "test_agent"
     mock_agent.tools = [mock_tool]
 
@@ -84,9 +83,9 @@ def test_get_tools_from_agent_with_tool_no_attributes():
     assert tool.description == "No description available"
 
 
-def test_get_tools_from_agent_without_name():
+def test_get_tools_from_agent_without_name(mocker):
     """Test get_tools_from_agent with an agent that doesn't have a name attribute."""
-    mock_agent = Mock()
+    mock_agent = mocker.Mock()
     mock_agent.tools = []
     # Don't set name attribute
 
@@ -96,9 +95,9 @@ def test_get_tools_from_agent_without_name():
     assert result.agent_name == "Unknown Agent"
 
 
-def test_get_tools_from_agent_without_tools_attribute():
+def test_get_tools_from_agent_without_tools_attribute(mocker):
     """Test get_tools_from_agent with an agent that doesn't have a tools attribute."""
-    mock_agent = Mock()
+    mock_agent = mocker.Mock()
     mock_agent.name = "test_agent"
     # Don't set tools attribute
 
