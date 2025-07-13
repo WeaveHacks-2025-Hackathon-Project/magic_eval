@@ -34,15 +34,14 @@ async def call_agent_async(
     return all_events
 
 
-# TODO: Create a function to run a scenario
 async def run_scenario(scenario: Scenario, agent: Agent) -> bool:
     """Run a scenario and return True if successful, False otherwise."""
     expected_tool_call = scenario.expected_tool_call
 
     # Filler names
-    user_id = ("1",)
-    session_id = ("2",)
-    app_name = ("3",)
+    user_id = "123"
+    session_id = "456"
+    app_name = "789"
 
     events = await call_agent_async(
         agent, scenario.query, user_id, session_id, app_name
