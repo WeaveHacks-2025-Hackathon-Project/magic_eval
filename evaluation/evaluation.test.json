@@ -1,17 +1,17 @@
 {
-  "eval_set_id": "automation_agent_store_file_set",
-  "name": "",
-  "description": "This is an eval set that is used for unit testing storage interaction behavior of the Agent",
+  "eval_set_id": "time_agent_evaluation_set",
+  "name": "Time Agent Evaluation Set",
+  "description": "This is an eval set that is used for unit testing time-related queries behavior of the Time Agent",
   "eval_cases": [
     {
-      "eval_id": "eval_case_id",
+      "eval_id": "get_current_time_test",
       "conversation": [
         {
-          "invocation_id": "b7982664-0ab6-47cc-ab13-326656afdf75",
+          "invocation_id": "time-test-001",
           "user_content": {
             "parts": [
               {
-                "text": "Store file alpha to storage location onedrive."
+                "text": "What time is it now?"
               }
             ],
             "role": "user"
@@ -19,7 +19,7 @@
           "final_response": {
             "parts": [
               {
-                "text": "I have stored file alpha to storage location onedrive."
+                "text": "The current time is 2025-07-13 14:30:00 UTC"
               }
             ],
             "role": "model"
@@ -27,12 +27,8 @@
           "intermediate_data": {
             "tool_uses": [
               {
-                "args": {
-                  "location": "onedrive",
-                  "device_id": "device_0",
-                  "status": "used"
-                },
-                "name": "use_storage_location"
+                "args": {},
+                "name": "get_current_time"
               }
             ],
             "intermediate_responses": []
@@ -40,14 +36,81 @@
         }
       ],
       "session_input": {
-        "app_name": "Storage_agent",
+        "app_name": "time_agent",
+        "user_id": "test_user",
+        "state": {}
+      }
+    },
+    {
+      "eval_id": "get_current_date_test",
+      "conversation": [
+        {
+          "invocation_id": "time-test-002",
+          "user_content": {
+            "parts": [
+              {
+                "text": "What is today's date?"
+              }
+            ],
+            "role": "user"
+          },
+          "final_response": {
+            "parts": [
+              {
+                "text": "Today's date is July 13, 2025"
+              }
+            ],
+            "role": "model"
+          },
+          "intermediate_data": {
+            "tool_uses": [
+              {
+                "args": {},
+                "name": "get_current_date"
+              }
+            ],
+            "intermediate_responses": []
+          }
+        }
+      ],
+      "session_input": {
+        "app_name": "time_agent",
+        "user_id": "test_user",
+        "state": {}
+      }
+    },
+    {
+      "eval_id": "no_tool_needed_test",
+      "conversation": [
+        {
+          "invocation_id": "time-test-003",
+          "user_content": {
+            "parts": [
+              {
+                "text": "Hello, how are you?"
+              }
+            ],
+            "role": "user"
+          },
+          "final_response": {
+            "parts": [
+              {
+                "text": "Hello! I'm doing well, thank you for asking. How can I help you today?"
+              }
+            ],
+            "role": "model"
+          },
+          "intermediate_data": {
+            "tool_uses": [],
+            "intermediate_responses": []
+          }
+        }
+      ],
+      "session_input": {
+        "app_name": "time_agent",
         "user_id": "test_user",
         "state": {}
       }
     }
-  ],
-"criteria":{
-"tool_trajectory_avg_score":1.0,
-"response_match_score":0.8
-}
+  ]
 }
