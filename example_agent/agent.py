@@ -13,9 +13,9 @@ load_dotenv()
 # Set up Weave tracing
 tracer = setup_weave_tracing()
 
-COIN_FLIP_MCP_SERVER = MCPToolset(
+MCP_TIME_SERVER = MCPToolset(
     connection_params=StdioServerParameters(
-        command="npx", args=["-y", "@modelcontextprotocol/server-coin-flip"]
+        command="python", args=["-m", "mcp_server_time"]
     )
 )
 
@@ -45,6 +45,7 @@ def llama_completion(messages, **kwargs):
 
 root_agent = LlmAgent(
     model=LiteLlm(model=f"meta_llama/{LLAMA_MODEL}"),
-    name="coinflip_agent",
-    instruction="You are a coinflip agent. You will be given a message and you will need to flip a coin. You will need to return the result of the coin flip.",
+    name="time_agent",
+    instruction="You are a helpful assistant.",
+    tools=[MCP_TIME_SERVER],
 )
