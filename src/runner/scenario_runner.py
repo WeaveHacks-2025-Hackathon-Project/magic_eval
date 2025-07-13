@@ -5,7 +5,7 @@ from google.adk.runners import Runner
 from google.adk.sessions import InMemorySessionService
 from google.genai import types
 
-from runner.scenario import Scenario
+from src.runner.scenario import Scenario
 
 
 async def setup_session_and_runner(
