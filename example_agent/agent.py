@@ -34,7 +34,7 @@ def llama_completion(messages, **kwargs):
         span.set_attribute("messages_count", len(messages))
 
         # Create LiteLLM model instance
-        model = LiteLlm(model=f"meta-llama/{LLAMA_MODEL}")
+        model = LiteLlm(model=f"meta_llama/{LLAMA_MODEL}")
 
         # Use the model's completion method
         result = model.complete(messages=messages, **kwargs)
