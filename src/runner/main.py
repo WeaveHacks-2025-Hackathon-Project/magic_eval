@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 import sys
-from scenario.crew import 
+from scenario import Scenario_Eval_Crew
 
-
+"""Scenario evaluation crew for ScenarioEval project."""
 def run():
     # Replace with your inputs, it will automatically interpolate any tasks and agents information
     inputs = {
